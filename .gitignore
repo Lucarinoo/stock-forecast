@@ -1,0 +1,55 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.pkl
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ---- Virtual envs ----
+.venv/
+venv/
+ENV/
+env/
+.conda/
+conda-env/
+
+# ---- OS / Editor ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ---- Jupyter ----
+*.ipynb
+
+# ---- Data / Outputs / Models ----
+data/raw/
+data/processed/
+outputs/
+models/latest.joblib
+models/*.joblib
+models/archive/
+
+# If you want to keep folder structure in git, allow placeholder files:
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!outputs/forecasts/.gitkeep
+!outputs/plots/.gitkeep
+!outputs/reports/.gitkeep
+!models/.gitkeep
+!models/archive/.gitkeep
+
+# ---- Logs ----
+*.log
+
+# ---- Secrets ----
+.env
+*.env
+config/*.secrets.*
