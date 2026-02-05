@@ -10,6 +10,7 @@ cmd = [
     "streamlit",
     "run",
     "scripts/dashboard.py",
+    "--server.address=0.0.0.0",
     "--server.port=8501",
     "--server.headless=true",
 ]
