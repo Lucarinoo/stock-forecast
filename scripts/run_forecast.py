@@ -356,9 +356,9 @@ def main():
     cols = ["ticker", "date", "last_close", "pred_pct_p10", "pred_pct_p50", "pred_pct_p90", "pred_price_p10", "pred_price_p50", "pred_price_p90"]
     print("\n== Forecast ==")
     print(preds[cols].to_string(index=False, float_format=lambda v: f"{v:,.4f}"))
-    print(f"\n✅ CSV: {out_csv}")
+    print(f"\nCSV: {out_csv}")
     if use_bands:
-        print(f"✅ Plots: {plots_dir}")
+        print(f"Plots: {plots_dir}")
 
 
 if __name__ == "__main__":
