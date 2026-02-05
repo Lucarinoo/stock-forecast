@@ -1,149 +1,147 @@
-# 📈 Stock Forecast – Global 1-Day ML Model
+# 📈 Stock Forecast – Global ML System
 
-Ein **globales Machine-Learning-Forecast-Tool** für Aktienmärkte.  
-Das Modell sagt **die nächste Tagesbewegung (1-Day Forecast)** für beliebige Aktien voraus – inklusive **Unsicherheitsband** und **Markt-Kontext**.
+A **global machine-learning forecasting system for stocks** with a 1-day horizon.
+The project covers the **full ML lifecycle**: training, forecasting, evaluation,
+backtesting, automation, and a clean dashboard.
 
-> ⚠️ Kein Trading-Bot.  
-> 🎯 Fokus: Forecasting, Analyse, Research & saubere ML-Architektur.
-
----
-
-## ✨ Features
-
-- 🔁 **Globales Modell** (ein Modell für alle Aktien)
-- 📊 **1-Day Forecast** (log-return → Preisprojektion)
-- 🌍 **Market-Features**:
-  - SPY (Gesamtmarkt)
-  - QQQ (Nasdaq / Tech)
-  - VIX (Volatilität)
-- 📉 **Confidence Bands (P10 / P50 / P90)** via Bootstrap-Ensemble
-- 🖼️ **Plots pro Aktie** (Preisverlauf + Forecast-Band)
-- 🧠 **Explainability**:
-  - Permutation Feature Importance
-- 🧪 **Zeitlich sauberes Backtesting** (kein Lookahead)
+> Research & portfolio project  
+> Not a trading bot. No financial advice.
 
 ---
 
-## 🗂️ Projektstruktur
+## ✨ Key Features
+
+### 🔮 Forecasting
+- Global ML model (single model across all stocks)
+- 1-day horizon (next trading day)
+- Predicts:
+  - Return distribution (P10 / P50 / P90)
+  - Price projections
+- Market context features (e.g. market & volatility proxies)
+
+### 📊 Evaluation
+- Directional accuracy (up/down)
+- Persistent evaluation log (grows over time)
+- Accuracy by:
+  - overall
+  - ticker
+  - day
+
+### 📉 Backtesting
+- Long **and** short positions
+- Equal-weight portfolio
+- 1-day holding period
+- Optional:
+  - prediction threshold
+  - transaction costs
+- Metrics:
+  - total & annualized return
+  - Sharpe ratio
+  - max drawdown
+
+### 🔁 Automation
+- Daily pipeline via Windows Task Scheduler
+- One command runs:
+  1. Forecast
+  2. Evaluation
+- Robust logging (no silent failures)
+
+### 🖥️ Dashboard (Streamlit)
+- Dark / Light mode toggle
+- Tabs:
+  - Latest forecast
+  - Evaluation & accuracy
+  - Backtest results
+  - Forecast plots
+- Auto-start on login (Task Scheduler)
+
+---
+
+## 🗂️ Project Structure
 
 ```text
 stock-forecast/
-├─ config/
-│  └─ tickers.txt          # Liste der Aktien
-├─ models/
-│  └─ latest.joblib        # Aktives Modell
-├─ outputs/
-│  ├─ forecasts/           # CSV Forecasts
-│  ├─ plots/               # PNG Plots pro Run
-│  └─ reports/             # Feature Importance
 ├─ scripts/
-│  ├─ train_model.py       # Modell trainieren
-│  ├─ run_forecast.py      # Forecast + Bands + Plots
-│  └─ run_importance.py    # Feature Importance
-├─ data/                   # (ignoriert, optionales Caching)
-├─ archive/                # alte Versionen / Experimente
+│  ├─ train_model.py
+│  ├─ run_forecast.py
+│  ├─ evaluate_forecasts.py
+│  ├─ backtest.py
+│  ├─ run_daily.py
+│  ├─ start_dashboard.py
+│  └─ dashboard.py
+├─ outputs/
+│  ├─ forecasts/
+│  ├─ evaluations/
+│  ├─ backtests/
+│  ├─ plots/
+│  └─ logs/
+├─ models/
+│  └─ latest.joblib
+├─ config/
+│  └─ tickers.txt
 ├─ README.md
+├─ requirements.txt
 └─ .gitignore
 
 
 
-⚙️ Installation
-Voraussetzungen
+⚙️ Setup
+Python
 
-Python 3.9+ empfohlen
+Python 3.11 recommended
 
-Dependencies installieren
-pip install yfinance pandas numpy scikit-learn joblib matplotlib
+Install dependencies
+py -3.11 -m pip install -r requirements.txt
 
-📌 Ticker festlegen
+▶️ Usage
+Run daily pipeline (forecast + evaluation)
+py -3.11 scripts/run_daily.py
 
-In config/tickers.txt (eine Aktie pro Zeile):
+Run evaluation manually
+py -3.11 scripts/evaluate_forecasts.py
 
-AAPL
-MSFT
-NVDA
-AMD
-TSLA
-SAP.DE
-ASML
+Run backtest
+py -3.11 scripts/backtest.py --min-abs-pred 0.3 --cost-bps 5
 
-🏋️ Modell trainieren
-
-Trainiert ein globales Modell und speichert es als:
-
-models/latest.joblib
-
-python scripts/train_model.py
+Start dashboard manually
+py -3.11 -m streamlit run scripts/dashboard.py
 
 
-Optional:
+Dashboard:
 
-python scripts/train_model.py --lookback-years 10
+http://localhost:8501
 
-🔮 Forecast ausführen
-Mit Confidence Bands (empfohlen)
-python scripts/run_forecast.py --bands
+🔁 Automation
+Daily forecast & evaluation
 
-Schnell (ohne Bootstrap-Bands)
-python scripts/run_forecast.py --no-bands
+Managed via Windows Task Scheduler
 
-Outputs
+Uses:
 
-outputs/forecasts/<timestamp>_forecast.csv
+py.exe -3.11 scripts/run_daily.py
 
-outputs/plots/<timestamp>/*.png
+Dashboard auto-start
 
-🧠 Feature Importance (Explainability)
+Streamlit dashboard starts automatically on login
 
-Berechnet Permutation Importance auf zeitlichem Holdout.
+Wrapper:
 
-python scripts/run_importance.py
+scripts/start_dashboard.py
 
+📊 Interpretation Notes
 
-Outputs:
+Directional accuracy > 52% indicates signal beyond randomness
 
-outputs/reports/<timestamp>_importance.csv
+Backtest metrics are only meaningful with sufficient history
 
-outputs/reports/<timestamp>_importance.png
+Early results (few days) are exploratory, not statistically conclusive
 
-🧪 Modell-Interpretation
+🚫 Disclaimer
 
-P50 → erwartete Bewegung
+This project is for research and educational purposes only.
+It does not provide investment advice.
 
-P10 / P90 → Unsicherheitsband
-
-VIX-Features zeigen Marktstress
-
-ticker_id kodiert aktienspezifische Muster
-
-🚫 Was dieses Projekt NICHT ist
-
-❌ Kein Trading-System
-
-❌ Keine Kauf-/Verkaufsempfehlung
-
-❌ Kein Intraday-Forecast
-
-❌ Keine News/Sentiment-Analyse
-
-🚀 Mögliche Erweiterungen
-
-📈 Trading-Signals (Thresholds, Risk-Management)
-
-📰 News- & Sentiment-Features
-
-🧠 Regime-Detection (Bullen/Bärenmarkt)
-
-🌐 API oder Dashboard (FastAPI / Streamlit)
-
-🔄 Auto-Retraining (daily/weekly)
-
-📜 Disclaimer
-
-Dieses Projekt dient Forschung, Lernen und Analyse.
-Keine Anlageberatung. Nutzung auf eigene Verantwortung.
-
-👤 Autor
+👤 Author
 
 Built by Luca
-AI / ML · Quant-interessiert · Forecasting & Data Science
+Machine Learning · Data Science · Quant-oriented projects
